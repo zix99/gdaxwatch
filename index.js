@@ -5,7 +5,7 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 const config = require('./config');
 
-const client = new gdax.AuthenticatedClient(config.key, config.b64secret, config.passphrase, config.url);
+const client = Promise.promisifyAll(new gdax.AuthenticatedClient(config.key, config.b64secret, config.passphrase, config.url), {multiArgs:true});
 
 const screen = blessed.screen({smartCSR: true});
 const priceTable = blessed.table({
@@ -19,7 +19,7 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 });
 
 function update() {
-	client.getAccounts((err, resp, data) => {
+	client.getAccountsAsync().spread((resp, data) => {
 		const NUMF = "0,0.0000";
 		let rows = _.map(data, val => {
 			return [val.currency, numeral(val.balance).format(NUMF), numeral(val.available).format(NUMF), numeral(val.hold).format(NUMF)];
