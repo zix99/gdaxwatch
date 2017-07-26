@@ -1,0 +1,23 @@
+{
+  "name": "gdaxwatch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "bluebird": "^3.5.0",
+    "gdax": "^0.4.2",
+    "lodash": "^4.17.4",
+    "numeral": "^2.0.6",
+    "rc": "^1.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
