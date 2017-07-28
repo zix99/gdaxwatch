@@ -3,6 +3,7 @@ const blessed = require('blessed');
 const numeral = require('numeral');
 const Promise = require('bluebird');
 const moment = require('moment');
+const chalk = require('chalk');
 const _ = require('lodash');
 const config = require('./config');
 
@@ -39,7 +40,7 @@ const priceTable = blessed.ListTable({
 blessed.text({
 	parent:screen,
 	top:9,
-	content: 'Outstanding Orders:'
+	content: 'Outstanding Orders: (O=outstanding, F=filled, X=non-filled)'
 })
 const orderTable = blessed.ListTable({
 	parent: screen,
@@ -47,7 +48,7 @@ const orderTable = blessed.ListTable({
 		type: 'line',
 	},
 	top: 10,
-	height:10,
+	height:15,
 	style : {
 		header: {
 			bold: true,
@@ -124,8 +125,9 @@ function updateOrderTable() {
 					numeral(order.price).format(NUMF)
 				]
 			),
-			_.map(_.take(fills, 5), fill => [
-				'X',
+			[[]], //empty row
+			_.map(_.take(fills, 10), fill => [
+				fill.settled ? 'F' : 'X',
 				fill.product_id,
 				fill.side,
 				'',
