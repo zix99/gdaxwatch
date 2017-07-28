@@ -28,6 +28,12 @@ const priceTable = blessed.table({
 		type: 'line'
 	},
 	top: 1,
+	style : {
+		header: {
+			bold: true,
+			bg: 'green',
+		}
+	},
 });
 blessed.text({
 	parent:screen,
@@ -39,7 +45,13 @@ const orderTable = blessed.table({
 	border: {
 		type: 'line',
 	},
-	top: 14
+	top: 14,
+	style : {
+		header: {
+			bold: true,
+			bg: 'blue',
+		}
+	},
 });
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
