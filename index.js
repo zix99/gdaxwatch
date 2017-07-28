@@ -65,8 +65,9 @@ function updatePriceTable() {
 				];
 			});
 		}).then(rows => {
-			rows.unshift(['Currency', 'Price', 'Balance', 'Hold', 'USD']);
-			priceTable.setData(rows);
+			let ordered = _.orderBy(rows, x => x[0]);
+			ordered.unshift(['Currency', 'Price', 'Balance', 'Hold', 'USD']);
+			priceTable.setData(ordered);
 		});
 	});
 }
