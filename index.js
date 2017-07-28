@@ -29,12 +29,17 @@ const priceTable = blessed.table({
 	},
 	top: 1,
 });
+blessed.text({
+	parent:screen,
+	top:13,
+	content: 'Outstanding Orders:'
+})
 const orderTable = blessed.table({
 	parent: screen,
 	border: {
 		type: 'line',
 	},
-	top: 12
+	top: 14
 });
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
@@ -81,7 +86,7 @@ function update() {
 			updatePriceTable(),
 			updateOrderTable(),
 		]).then(() => {
-			title.setText(new Date().toString());
+			title.setText('Updated: ' + moment().format('L HH:mm'));
 			screen.render();
 		});
 }
