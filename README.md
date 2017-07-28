@@ -11,3 +11,9 @@ passphrase=xxx
 key=yyy
 b64secret=zzz
 ```
+
+## Running
+```sh
+npm install
+npm start
+```
