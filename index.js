@@ -37,7 +37,7 @@ const priceTable = blessed.table({
 });
 blessed.text({
 	parent:screen,
-	top:13,
+	top:14,
 	content: 'Outstanding Orders:'
 })
 const orderTable = blessed.table({
@@ -45,7 +45,7 @@ const orderTable = blessed.table({
 	border: {
 		type: 'line',
 	},
-	top: 14,
+	top: 15,
 	style : {
 		header: {
 			bold: true,
@@ -64,24 +64,43 @@ function getTicker(currency) {
 		.then(resp => JSON.parse(resp.body));
 }
 
+function getAccountsData() {
+	return client.getAccountsAsync()
+		.spread((resp, accounts) => accounts)
+		.map(account => {
+			return getTicker(account.currency)
+				.then(ticker => {
+					return {
+						currency: account.currency,
+						balance: numeral(account.balance),
+						available: numeral(account.available),
+						hold: numeral(account.hold),
+						price: numeral(ticker.price),
+						usd: numeral(account.balance).multiply(ticker.price),
+					};
+				});
+		});
+}
+
 function updatePriceTable() {
-	return client.getAccountsAsync().spread((resp, accounts) => {
-		return Promise.map(accounts, account => {
-			return getTicker(account.currency).then(ticker => {
+	return getAccountsData()
+		.then(accounts => {
+			let ordered = _.orderBy(accounts, x => x.currency);
+			let sumUsd = _.reduce(accounts, (total, x) => total.add(x.usd.value()), numeral(0));
+
+			let rows = _.map(ordered, row => {
 				return [
-					account.currency,
-					numeral(ticker.price).format(NUMF),
-					numeral(account.balance).format(NUMF),
-					numeral(account.hold).format(NUMF),
-					numeral(account.balance).multiply(ticker.price).format(NUMF),
+					row.currency,
+					row.price.format(NUMF),
+					row.balance.format(NUMF),
+					row.hold.format(NUMF),
+					row.usd.format(NUMF)
 				];
 			});
-		}).then(rows => {
-			let ordered = _.orderBy(rows, x => x[0]);
-			ordered.unshift(['Currency', 'Price', 'Balance', 'Hold', 'USD']);
-			priceTable.setData(ordered);
+			rows.unshift(['Currency', 'Price', 'Balance', 'Hold', 'USD']);
+			rows.push(['Sum','','','',sumUsd.format(NUMF)]);
+			priceTable.setData(rows);
 		});
-	});
 }
 
 function updateOrderTable() {
