@@ -22,12 +22,13 @@ const title = blessed.text({
 	align: 'right',
 	width: '100%',
 });
-const priceTable = blessed.table({
+const priceTable = blessed.ListTable({
 	parent:screen,
 	border: {
 		type: 'line'
 	},
 	top: 1,
+	height: 8,
 	style : {
 		header: {
 			bold: true,
@@ -37,15 +38,16 @@ const priceTable = blessed.table({
 });
 blessed.text({
 	parent:screen,
-	top:14,
+	top:9,
 	content: 'Outstanding Orders:'
 })
-const orderTable = blessed.table({
+const orderTable = blessed.ListTable({
 	parent: screen,
 	border: {
 		type: 'line',
 	},
-	top: 15,
+	top: 10,
+	height:10,
 	style : {
 		header: {
 			bold: true,
@@ -53,6 +55,8 @@ const orderTable = blessed.table({
 		}
 	},
 });
+
+
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
@@ -104,11 +108,34 @@ function updatePriceTable() {
 }
 
 function updateOrderTable() {
-	return client.getOrdersAsync().spread((resp, orders) => {
-		let rows = _.map(orders, order => 
-			[order.product_id, order.side, order.type, moment(order.created_at).format('M/D H:mm'), numeral(order.size).format(NUMF), numeral(order.price).format(NUMF)]
+	return Promise.all([
+		client.getOrdersAsync().spread((resp, orders) => orders),
+		client.getFillsAsync().spread((resp, fills) => fills),
+	]).spread((orders, fills) => {
+		let rows = _.concat(
+			_.map(orders, order => 
+				[
+					'O',
+					order.product_id,
+					order.side,
+					order.type,
+					moment(order.created_at).format('M/D H:mm'),
+					numeral(order.size).format(NUMF),
+					numeral(order.price).format(NUMF)
+				]
+			),
+			_.map(_.take(fills, 5), fill => [
+				'X',
+				fill.product_id,
+				fill.side,
+				'',
+				moment(fill.created_at).format('M/D H:mm'),
+				numeral(fill.size).format(NUMF),
+				numeral(fill.price).format(NUMF),
+				numeral(fill.fee).format(NUMF),
+			])
 		);
-		rows.unshift(['Product', 'Side', 'Type', 'Created', 'Size', 'Price']);
+		rows.unshift(['', 'Product', 'Side', 'Type', 'Created', 'Size', 'Price', 'Fee']);
 		orderTable.setData(rows);
 	});
 }
