@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const gdax = require('gdax');
 const blessed = require('blessed');
 const numeral = require('numeral');

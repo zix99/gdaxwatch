@@ -1,14 +1,21 @@
 {
   "name": "gdaxwatch",
   "version": "1.0.0",
-  "description": "",
+  "description": "Display gdax prices and orders in the cli",
+  "repository" : "zix99/gdaxwatch",
   "main": "index.js",
+  "engines" : {
+    "node" : ">=6.11.0"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
+  "bin" : {
+    "gdaxwatch" : "./index.js"
+  },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "blessed": "^0.1.81",
     "bluebird": "^3.5.0",
