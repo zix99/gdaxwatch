@@ -40,7 +40,7 @@ const priceTable = blessed.ListTable({
 blessed.text({
 	parent:screen,
 	top:9,
-	content: 'Outstanding Orders: (O=outstanding, F=filled, X=non-filled)'
+	content: 'Orders: (O=outstanding, F=filled, X=non-filled)'
 })
 const orderTable = blessed.ListTable({
 	parent: screen,
