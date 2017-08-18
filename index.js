@@ -8,6 +8,11 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const config = require('./config');
 
+if (!config.key || !config.b64secret || !config.passphrase || !config.url) {
+	console.log('Invalid configuration. Please make sure that key, b64secret, and passphrase are set');
+	process.exit(1);
+}
+
 const client = Promise.promisifyAll(new gdax.AuthenticatedClient(config.key, config.b64secret, config.passphrase, config.url), {multiArgs:true});
 
 const coinClient = {
