@@ -16,6 +16,7 @@
   },
   "author": "",
   "license": "MIT",
+  "keywords" : ["gdax", "bitcoin", "ether", "cryptocurrency"],
   "dependencies": {
     "blessed": "^0.1.81",
     "bluebird": "^3.5.0",
