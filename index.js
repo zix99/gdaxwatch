@@ -155,6 +155,9 @@ function update() {
 		]).then(() => {
 			title.setText('Updated: ' + moment().format('L HH:mm'));
 			screen.render();
+		}).catch(err => {
+			title.setText('Error: ' + err.message);
+			screen.render();
 		});
 }
 
