@@ -54,7 +54,7 @@ const orderTable = blessed.ListTable({
 		type: 'line',
 	},
 	top: 10,
-	height:15,
+	height:config.ordercount+5,
 	style : {
 		header: {
 			bold: true,
@@ -132,7 +132,7 @@ function updateOrderTable() {
 				]
 			),
 			[[]], //empty row
-			_.map(_.take(fills, 10), fill => [
+			_.map(_.take(fills, config.ordercount), fill => [
 				fill.settled ? 'F' : 'X',
 				fill.product_id,
 				fill.side,

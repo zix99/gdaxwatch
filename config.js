@@ -3,4 +3,5 @@ module.exports = require('rc')('gdax', {
 	key: '',
 	b64secret: '',
 	url: 'https://api.gdax.com',
+	ordercount: 10,
 });
