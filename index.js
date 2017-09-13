@@ -15,11 +15,9 @@ if (!config.key || !config.b64secret || !config.passphrase || !config.url) {
 
 const client = Promise.promisifyAll(new gdax.AuthenticatedClient(config.key, config.b64secret, config.passphrase, config.url), {multiArgs:true});
 
-const coinClient = {
-	'BTC' : Promise.promisifyAll(new gdax.PublicClient('BTC-USD')),
-	'ETH' : Promise.promisifyAll(new gdax.PublicClient('ETH-USD')),
-	'LTC' : Promise.promisifyAll(new gdax.PublicClient('LTC-USD')),
-}
+const coinClient = _.mapValues(config.currencies, product => {
+	return Promise.promisifyAll(new gdax.PublicClient(product));
+});
 
 const NUMF = "0,0.0000";
 
@@ -114,10 +112,19 @@ function updatePriceTable() {
 		});
 }
 
+function getAllFills() {
+	return Promise.map(_.values(config.currencies), (product) => {
+		return client.getFillsAsync({limit: config.ordercount, product_id: product})
+			.spread((resp, fills) => fills);
+	})
+	.then(_.flatten)
+	.then(items => _.orderBy(items, item => moment(item.created_at), 'desc'));
+}
+
 function updateOrderTable() {
 	return Promise.all([
 		client.getOrdersAsync().spread((resp, orders) => orders),
-		client.getFillsAsync().spread((resp, fills) => fills),
+		getAllFills(),
 	]).spread((orders, fills) => {
 		let rows = _.concat(
 			_.map(orders, order => 
