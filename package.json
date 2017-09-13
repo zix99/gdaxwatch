@@ -1,6 +1,6 @@
 {
   "name": "gdaxwatch",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Display gdax prices and orders in the cli",
   "repository" : "zix99/gdaxwatch",
   "main": "index.js",
