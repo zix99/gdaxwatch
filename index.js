@@ -4,7 +4,6 @@ const blessed = require('blessed');
 const numeral = require('numeral');
 const Promise = require('bluebird');
 const moment = require('moment');
-const chalk = require('chalk');
 const _ = require('lodash');
 const config = require('./config');
 
