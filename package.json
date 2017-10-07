@@ -1,22 +1,27 @@
 {
   "name": "gdaxwatch",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Display gdax prices and orders in the cli",
-  "repository" : "zix99/gdaxwatch",
+  "repository": "zix99/gdaxwatch",
   "main": "index.js",
-  "engines" : {
-    "node" : ">=6.11.0"
+  "engines": {
+    "node": ">=6.11.0"
   },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "bin" : {
-    "gdaxwatch" : "./index.js"
+  "bin": {
+    "gdaxwatch": "./index.js"
   },
   "author": "",
   "license": "MIT",
-  "keywords" : ["gdax", "bitcoin", "ether", "cryptocurrency"],
+  "keywords": [
+    "gdax",
+    "bitcoin",
+    "ether",
+    "cryptocurrency"
+  ],
   "dependencies": {
     "blessed": "^0.1.81",
     "bluebird": "^3.5.0",
